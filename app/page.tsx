@@ -1,9 +1,19 @@
+import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex flex-col items-center justify-between">
       <div>
-        digital collection real portals
+        <Image
+          src='/nature.jpg'
+          alt='orange envirment'
+          width={999}
+          height={999}
+          className="w-screen h-[100vh] object-cover"
+        />
+        <h1 className="flex justify-center">
+          digital collection real portals
+        </h1>
       </div>
     </main>
   )
