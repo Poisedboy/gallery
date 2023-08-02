@@ -11,9 +11,6 @@ export default function Home() {
           height={999}
           className="w-screen h-[100vh] object-cover"
         />
-        <h1 className="flex justify-center">
-          digital collection real portals
-        </h1>
       </div>
     </main>
   )

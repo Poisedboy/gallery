@@ -11,7 +11,7 @@ const Header = () => {
     const pathname = usePathname()
 
     return (
-        <div className={`w-full h-[100px] fixed backdrop-blur-sm flex items-center justify-between ${pathname === '/' ? 'text-white' : ''}`}>
+        <div className={`w-full h-[100px] fixed flex items-center justify-between ${pathname === '/' ? 'text-white backdrop-blur-sm' : ''}`}>
             <div className="ml-5 flex">
                 <div className="mr-5">
                     <Link
