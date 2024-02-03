@@ -38,12 +38,29 @@ export const authOptions: NextAuthOptions = {
           existingUser?.password
         );
         if (!passwordMatch) return null;
-        return {
-          id: `${existingUser?.id}`,
-          username: existingUser?.username,
-          email: existingUser?.email,
-        };
+        const { password, createdAt, updatedAt, ...restInfo } = existingUser;
+        return restInfo;
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        return {
+          ...token,
+          ...user,
+        };
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          ...token,
+        },
+      };
+    },
+  },
 };
