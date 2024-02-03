@@ -66,7 +66,9 @@ const Header = () => {
             </Link>
           </Button>
           <Button variant="outline" size="icon">
-            <ProfileIcon width={25} height={25} />
+            <Link href={"/sign-up"}>
+              <ProfileIcon width={25} height={25} />
+            </Link>
           </Button>
         </NavbarItem>
         <NavbarItem></NavbarItem>
@@ -98,8 +100,14 @@ const Header = () => {
                 <ShoppingCartIcon width={25} height={25} />
               </Link>
             </Button>
-            <Button variant="outline" size="icon">
-              <ProfileIcon width={25} height={25} />
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setIsMenuOpen((prevState) => false)}
+            >
+              <Link href={"/sign-up"}>
+                <ProfileIcon width={25} height={25} />
+              </Link>
             </Button>
             <ModeToggle />
           </div>
