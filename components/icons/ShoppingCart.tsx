@@ -1,11 +1,7 @@
+import { IPropsIcon } from "@/types/Icon.type";
 import * as React from "react";
 
-interface Icon {
-  width: number;
-  height: number;
-}
-
-function SvgComponent({ width = 24, height = 24 }: Icon) {
+function ShoppingCartIcon({ width = 24, height = 24 }: IPropsIcon) {
   return (
     <svg width={width} height={height} viewBox="0 0 24 24" fill="none">
       <path
@@ -19,4 +15,4 @@ function SvgComponent({ width = 24, height = 24 }: Icon) {
   );
 }
 
-export default SvgComponent;
+export default ShoppingCartIcon;

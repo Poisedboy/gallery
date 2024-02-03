@@ -12,8 +12,9 @@ import {
   NavbarMenuToggle,
 } from "@nextui-org/react";
 import { useState } from "react";
-import ShoppingCart from "./icons/ShoppingCart";
 import { Button } from "./ui/button";
+import ProfileIcon from "./icons/Profile";
+import ShoppingCartIcon from "./icons/ShoppingCart";
 
 const links = [
   { name: "Home", link: "/" },
@@ -27,6 +28,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isActive, setActive] = useState("");
   console.log(pathname, isActive);
+
   return (
     <Navbar
       maxWidth="full"
@@ -59,9 +61,13 @@ const Header = () => {
         <NavbarItem className="hidden sm:flex items-center gap-3">
           <ModeToggle />
           <Button variant="outline" size="icon">
-            <ShoppingCart width={24} height={24} />
+            <Link href={"/cart"}>
+              <ShoppingCartIcon width={25} height={25} />
+            </Link>
           </Button>
-          <p>today: 10am - 6pm</p>
+          <Button variant="outline" size="icon">
+            <ProfileIcon width={25} height={25} />
+          </Button>
         </NavbarItem>
         <NavbarItem></NavbarItem>
       </NavbarContent>
@@ -70,15 +76,30 @@ const Header = () => {
           <div>
             {links.map((item, index) => (
               <NavbarMenuItem key={`${item.name}-${index}`}>
-                <Link className="w-full" href={item.link}>
+                <Link
+                  className={`w-full ${
+                    pathname === item.link ? "text-blue-600" : ""
+                  }`}
+                  href={item.link}
+                  onClick={() => setIsMenuOpen((prevState) => false)}
+                >
                   {item.name}
                 </Link>
               </NavbarMenuItem>
             ))}
           </div>
           <div className="flex flex-wrap justify-center gap-5">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setIsMenuOpen((prevState) => false)}
+            >
+              <Link href={"/cart"}>
+                <ShoppingCartIcon width={25} height={25} />
+              </Link>
+            </Button>
             <Button variant="outline" size="icon">
-              <ShoppingCart width={25} height={25} />
+              <ProfileIcon width={25} height={25} />
             </Button>
             <ModeToggle />
           </div>

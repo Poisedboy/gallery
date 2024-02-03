@@ -11,11 +11,11 @@ const ShopPage = ({ price, name }: any) => {
           key={product}
           isFooterBlurred
           radius="lg"
-          className="border-none w-[250px]"
+          className="border-none w-[150px] sm:w-[250px]"
         >
           <Image
             alt="Woman listing to music"
-            className="object-cover w-[250px] h-[350px]"
+            className="object-cover w-[150px] sm:w-[250px] h-[250px] sm:h-[350px]"
             height={350}
             src={index === 1 ? "/vertical-pic.jpg" : "/nature.jpg"}
             width={250}
