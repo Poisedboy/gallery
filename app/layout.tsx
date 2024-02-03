@@ -1,10 +1,10 @@
-import Header from "@/components/Header";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
-import Footer from "@/components/Footer";
-import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
+import Header from "@/components/Header";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -16,16 +16,18 @@ export const metadata: Metadata = {
   description: "Website of Lviv art exhibition",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
+  console.log("SERVER AUTH >>>> ", session);
   return (
     <html lang="en">
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Header />
+          <Header user={session?.user?.email} />
           {children}
         </ThemeProvider>
       </body>

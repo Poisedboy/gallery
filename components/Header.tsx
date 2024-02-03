@@ -11,10 +11,13 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import ProfileIcon from "./icons/Profile";
 import ShoppingCartIcon from "./icons/ShoppingCart";
+import { signOut } from "next-auth/react";
+import RedSignIcon from "./icons/RedSign";
+import LogoutIcon from "./icons/Logout";
 
 const links = [
   { name: "Home", link: "/" },
@@ -23,9 +26,10 @@ const links = [
   { name: "Shop", link: "/shop" },
 ];
 
-const Header = () => {
+const Header = ({ user }: any) => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  useEffect(() => {}, [user]);
 
   return (
     <Navbar
@@ -62,11 +66,25 @@ const Header = () => {
               <ShoppingCartIcon width={25} height={25} />
             </Link>
           </Button>
-          <Button variant="outline" size="icon">
-            <Link href={"/sign-up"}>
-              <ProfileIcon width={25} height={25} />
+          <Button variant="outline" size="icon" className="static">
+            <Link href={user ? "/setting" : "/sign-up"}>
+              <div className="relative">
+                {!user && (
+                  <RedSignIcon
+                    width={11}
+                    height={11}
+                    styles="absolute top-0 right-0"
+                  />
+                )}
+                <ProfileIcon width={25} height={25} />
+              </div>
             </Link>
           </Button>
+          {user && (
+            <Button variant="outline" size="icon" onClick={() => signOut()}>
+              <LogoutIcon />
+            </Button>
+          )}
         </NavbarItem>
         <NavbarItem></NavbarItem>
       </NavbarContent>
