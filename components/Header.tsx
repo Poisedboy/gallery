@@ -66,7 +66,7 @@ const Header = ({ user }: any) => {
               <ShoppingCartIcon width={25} height={25} />
             </Link>
           </Button>
-          <Button variant="outline" size="icon" className="static">
+          <Button variant="outline" size="icon">
             <Link href={user ? "/setting" : "/sign-up"}>
               <div className="relative">
                 {!user && (
@@ -89,7 +89,7 @@ const Header = ({ user }: any) => {
         <NavbarItem></NavbarItem>
       </NavbarContent>
       <NavbarMenu>
-        <div className="flex justify-between">
+        <div className="flex  justify-between">
           <div>
             {links.map((item, index) => (
               <NavbarMenuItem key={`${item.name}-${index}`}>
@@ -105,7 +105,7 @@ const Header = ({ user }: any) => {
               </NavbarMenuItem>
             ))}
           </div>
-          <div className="flex flex-wrap justify-center gap-5">
+          <div className="flex flex-col justify-center gap-5">
             <Button
               variant="outline"
               size="icon"
@@ -120,11 +120,25 @@ const Header = ({ user }: any) => {
               size="icon"
               onClick={() => setIsMenuOpen((prevState) => false)}
             >
-              <Link href={"/sign-up"}>
-                <ProfileIcon width={25} height={25} />
+              <Link href={user ? "/setting" : "/sign-up"}>
+                <div className="relative">
+                  {!user && (
+                    <RedSignIcon
+                      width={11}
+                      height={11}
+                      styles="absolute top-0 right-0"
+                    />
+                  )}
+                  <ProfileIcon width={25} height={25} />
+                </div>
               </Link>
             </Button>
             <ModeToggle />
+            {user && (
+              <Button variant="outline" size="icon" onClick={() => signOut()}>
+                <LogoutIcon />
+              </Button>
+            )}
           </div>
         </div>
       </NavbarMenu>
