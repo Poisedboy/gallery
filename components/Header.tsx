@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ModeToggle } from "./toggle-theme";
 import {
   Navbar,
@@ -11,6 +12,8 @@ import {
   NavbarMenuToggle,
 } from "@nextui-org/react";
 import { useState } from "react";
+import ShoppingCart from "./icons/ShoppingCart";
+import { Button } from "./ui/button";
 
 const links = [
   { name: "Home", link: "/" },
@@ -20,9 +23,10 @@ const links = [
 ];
 
 const Header = () => {
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isActive, setActive] = useState("");
-
+  console.log(pathname, isActive);
   return (
     <Navbar
       maxWidth="full"
@@ -41,10 +45,10 @@ const Header = () => {
           <NavbarItem key={`${item.name}-${index}`}>
             <Link
               className={`w-full ${
-                isActive === item.name ? "text-blue-600" : ""
+                pathname === item.link ? "text-blue-600" : ""
               }`}
               href={item.link}
-              onClick={() => setActive(item.name)}
+              onClick={() => setActive(item.link)}
             >
               {item.name}
             </Link>
@@ -52,21 +56,33 @@ const Header = () => {
         ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex items-center gap-3">
+        <NavbarItem className="hidden sm:flex items-center gap-3">
           <ModeToggle />
+          <Button variant="outline" size="icon">
+            <ShoppingCart width={24} height={24} />
+          </Button>
           <p>today: 10am - 6pm</p>
         </NavbarItem>
         <NavbarItem></NavbarItem>
       </NavbarContent>
       <NavbarMenu>
-        {links.map((item, index) => (
-          <NavbarMenuItem key={`${item.name}-${index}`}>
-            <Link className="w-full" href={item.link}>
-              {item.name}
-            </Link>
-          </NavbarMenuItem>
-        ))}
-        <ModeToggle />
+        <div className="flex justify-between">
+          <div>
+            {links.map((item, index) => (
+              <NavbarMenuItem key={`${item.name}-${index}`}>
+                <Link className="w-full" href={item.link}>
+                  {item.name}
+                </Link>
+              </NavbarMenuItem>
+            ))}
+          </div>
+          <div className="flex flex-wrap justify-center gap-5">
+            <Button variant="outline" size="icon">
+              <ShoppingCart width={25} height={25} />
+            </Button>
+            <ModeToggle />
+          </div>
+        </div>
       </NavbarMenu>
     </Navbar>
   );

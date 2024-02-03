@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <div className="px-10 py-5">
       <div>
-        <Image src="/logo.svg" width={115} height={38} alt="logo" />
+        <Image src="/logo.jpg" width={115} height={38} alt="logo" />
       </div>
       <div className="flex justify-around flex-wrap">
         <div className="m-2 text-center">
