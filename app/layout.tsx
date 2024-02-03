@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
+import { Providers } from "@/components/providers";
 import Header from "@/components/Header";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -25,10 +25,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <Providers attribute="class" defaultTheme="system" enableSystem>
           <Header user={session?.user?.email} />
           {children}
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

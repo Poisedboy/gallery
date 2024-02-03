@@ -1,5 +1,6 @@
 "use client";
 import { Accordion, AccordionItem } from "@nextui-org/react";
+import CreateProduct from "./CreateProduct";
 
 const AdminSettings = () => {
   return (
@@ -9,7 +10,7 @@ const AdminSettings = () => {
           Security
         </AccordionItem>
         <AccordionItem key="2" aria-label="Accordion 2" title="Create Product">
-          Create product
+          <CreateProduct />
         </AccordionItem>
         <AccordionItem key="3" aria-label="Accordion 3" title="Features">
           Features

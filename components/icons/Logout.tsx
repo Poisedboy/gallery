@@ -6,7 +6,7 @@ function LogoutIcon({ width = 24, height = 24 }: IPropsIcon) {
     <svg width={width} height={height} fill="none" viewBox="0 0 24 24">
       <g>
         <path
-          stroke="#000"
+          className="stroke-[black] dark:stroke-[white]"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"

@@ -6,7 +6,7 @@ import { type ThemeProviderProps } from "next-themes/dist/types";
 import { NextUIProvider } from "@nextui-org/react";
 import { SessionProvider } from "next-auth/react";
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+export function Providers({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider {...props}>
       <SessionProvider>
