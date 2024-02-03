@@ -26,8 +26,6 @@ const links = [
 const Header = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isActive, setActive] = useState("");
-  console.log(pathname, isActive);
 
   return (
     <Navbar
@@ -50,7 +48,6 @@ const Header = () => {
                 pathname === item.link ? "text-blue-600" : ""
               }`}
               href={item.link}
-              onClick={() => setActive(item.link)}
             >
               {item.name}
             </Link>

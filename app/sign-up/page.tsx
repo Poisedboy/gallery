@@ -29,7 +29,7 @@ const FormSchema = z
     message: "Password does not match",
   });
 
-const SignInPage = () => {
+const SignUpPage = () => {
   const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -41,7 +41,6 @@ const SignInPage = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
     const response = await fetch("api/user", {
       method: "POST",
       headers: {
@@ -150,4 +149,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default SignUpPage;
