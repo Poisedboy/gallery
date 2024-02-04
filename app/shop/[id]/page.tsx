@@ -19,9 +19,7 @@ const ProductPage = ({ params }: any) => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const res = await fetch(
-        `http://localhost:3000/api/product?id=${params.id}`
-      );
+      const res = await fetch(`/api/product?id=${params.id}`);
       const data = await res.json();
       setProduct(data.data);
     };
