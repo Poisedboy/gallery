@@ -16,7 +16,7 @@ const ShopPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-wrap gap-5 justify-center items-center my-[50px] mx-10">
+    <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 my-[50px] mx-10">
       {products.map((product: IProduct) => (
         <ProductCard key={product.id} product={product} />
       ))}
