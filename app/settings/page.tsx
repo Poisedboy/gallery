@@ -1,10 +1,8 @@
 import AdminSettings from "@/components/AdminSettings";
 import { authOptions } from "@/lib/auth";
+import { IUser } from "@/types/Common.type";
 import { getServerSession } from "next-auth";
 
-interface IUser {
-  role: string | null;
-}
 interface ISession {
   user: IUser;
 }

@@ -5,6 +5,7 @@ import { Providers } from "@/components/providers";
 import Header from "@/components/Header";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { Toaster } from "react-hot-toast";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default async function RootLayout({
         <Providers attribute="class" defaultTheme="system" enableSystem>
           <Header user={session?.user?.email} />
           {children}
+          <Toaster />
         </Providers>
       </body>
     </html>

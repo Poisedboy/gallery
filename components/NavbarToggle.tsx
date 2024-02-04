@@ -67,7 +67,7 @@ const NavToggle = ({ user }: any) => {
             </Link>
           </Button>
           <Button variant="outline" size="icon">
-            <Link href={user ? "/setting" : "/sign-up"}>
+            <Link href={user ? "/settings" : "/sign-up"}>
               <div className="relative">
                 {!user && (
                   <RedSignIcon
