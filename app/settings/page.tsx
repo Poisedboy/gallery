@@ -1,17 +1,22 @@
+"use client";
 import AdminSettings from "@/components/AdminSettings";
 import { authOptions } from "@/lib/auth";
 import { IUser } from "@/types/Common.type";
 import { getServerSession } from "next-auth";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-interface ISession {
-  user: IUser;
-}
+const SettingPage = () => {
+  const router = useRouter();
 
-const SettingPage = async () => {
-  const session: ISession | null = await getServerSession(authOptions);
+  const { data: session, status } = useSession();
+  if (status === "unauthenticated") {
+    router.push("/sign-in");
+  }
+
   return (
     <div className="mx-7 sm:mx-12 my-5 flex flex-col justify-center items-center">
-      {session?.user?.role === "USER" ? <AdminSettings /> : "USER"}
+      {session?.user?.role === "ADMIN" ? <AdminSettings /> : "USER"}
     </div>
   );
 };
