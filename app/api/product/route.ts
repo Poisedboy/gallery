@@ -1,13 +1,10 @@
 import { db } from "@/prisma/prisma";
 import { NextResponse } from "next/server";
 
-type NextRequest = {
-  nextUrl: URL;
-};
-
-export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   try {
-    const id = req.nextUrl.searchParams.get("id") ?? undefined;
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id") || undefined;
     const product = await db.product.findUnique({ where: { id } });
     return NextResponse.json({ data: product });
   } catch (e) {
