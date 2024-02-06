@@ -6,28 +6,27 @@ import {
 	FormItem,
 	FormMessage,
 } from "@/components/ui/form";
-import { supabase } from "@/lib/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import * as z from "zod";
 
-const FormProductSchema = z.object({
-	username: z.string().min(1, "Username is required").max(100),
-	email: z.string().min(1, "Email is required"),
+const FormUserSchema = z.object({
+	username: z.string().min(1, "Username is required"),
+	email: z
+		.string()
+		.min(1, "Email is required")
+		.email("Invalid email"),
 });
 
 export const ChangeUserData = () => {
-	const { data: session, status } = useSession();
-	const [userData, setUserData] = useState<any>();
-	const [email, setEmail] = useState("");
-	const [username, setUsername] = useState("");
+	const { data: session, status, update } = useSession();
 
-	const form = useForm<z.infer<typeof FormProductSchema>>({
-		resolver: zodResolver(FormProductSchema),
+	const form = useForm<z.infer<typeof FormUserSchema>>({
+		resolver: zodResolver(FormUserSchema),
 		defaultValues: {
 			username: "",
 			email: "",
@@ -35,41 +34,41 @@ export const ChangeUserData = () => {
 	});
 
 	useEffect(() => {
+		const interval = setInterval(() => update(), 1000 * 60 * 60);
+		return () => clearInterval(interval);
+	}, [update]);
+
+	useEffect(() => {
 		form.setValue("email", session?.user.email);
 		form.setValue("username", session?.user.username);
 	}, []);
 
-	const [image, setImage] = useState<File | undefined | null>(null);
-
-	const onSubmit = async (
-		values: z.infer<typeof FormProductSchema>
-	) => {
-		const { data, error } = await supabase.storage
-			.from("product")
-			.upload("public/" + image?.name, image as File);
-		if (error) {
-			return toast.error(error.message);
-		}
-
-		const response = await fetch("api/upload-product", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				username: values.username,
-				email: values.email,
-			}),
-		});
-		if (response.ok) {
-			form.reset({
-				username: session?.user.username,
-				email: session?.user.email,
+	const onSubmit = async (values: z.infer<typeof FormUserSchema>) => {
+		try {
+			const response = await fetch("api/update-user", {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					username: values.username,
+					email: values.email,
+				}),
 			});
-			toast.success("Data changed");
-		} else if (error) {
-			console.log(error);
-			return toast.error("An error occured");
+			if (response.ok) {
+				update({ username: values.username });
+				form.reset({
+					username: session?.user.username,
+					email: session?.user.email,
+				});
+				toast.success("Updated!");
+			} else if (response) {
+				const error = await response.json();
+				toast.error(`${error.message}!`);
+			}
+		} catch (e) {
+			toast.error("Error");
+			console.log(e);
 		}
 	};
 

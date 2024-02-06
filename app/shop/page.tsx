@@ -23,14 +23,16 @@ const ShopPage = () => {
 	}, []);
 
 	return (
-		<div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 my-[50px] mx-10">
-			{error ? (
-				<p className="w-full text-center">No Data</p>
-			) : (
-				products.map((product: IProduct) => (
-					<ProductCard key={product.id} product={product} />
-				))
-			)}
+		<div className="flex justify-center items-center">
+			<div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 my-[50px] mx-10">
+				{error ? (
+					<p className="w-full text-center">No Data</p>
+				) : (
+					products.map((product: IProduct) => (
+						<ProductCard key={product.id} product={product} />
+					))
+				)}
+			</div>
 		</div>
 	);
 };
