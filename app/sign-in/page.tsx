@@ -9,9 +9,11 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@nextui-org/react";
+import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
@@ -36,6 +38,8 @@ const SignInPage = () => {
 			password: "",
 		},
 	});
+
+	const [showPass, setShowPass] = useState(false);
 
 	const onSubmit = async (values: z.infer<typeof FormSchema>) => {
 		const signInData = await signIn("credentials", {
@@ -80,12 +84,25 @@ const SignInPage = () => {
 							render={({ field }) => (
 								<FormItem>
 									<FormControl>
-										<Input
-											label="Password"
-											variant="underlined"
-											type="password"
-											{...field}
-										/>
+										<div className="relative">
+											<Input
+												label="Password"
+												variant="underlined"
+												type={showPass ? "text" : "password"}
+												{...field}
+											/>
+											{showPass ? (
+												<EyeOpenIcon
+													className="absolute right-1 top-6"
+													onClick={() => setShowPass(!showPass)}
+												/>
+											) : (
+												<EyeClosedIcon
+													className="absolute right-1 top-6"
+													onClick={() => setShowPass(!showPass)}
+												/>
+											)}
+										</div>
 									</FormControl>
 									<FormMessage />
 								</FormItem>

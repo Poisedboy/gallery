@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@nextui-org/react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -56,12 +56,9 @@ export const ChangeUserData = () => {
 				}),
 			});
 			if (response.ok) {
-				update({ username: values.username });
-				form.reset({
-					username: session?.user.username,
-					email: session?.user.email,
-				});
+				update({username: values.username });
 				toast.success("Updated!");
+				signOut()
 			} else if (response) {
 				const error = await response.json();
 				toast.error(`${error.message}!`);
@@ -84,12 +81,12 @@ export const ChangeUserData = () => {
 						render={({ field }) => (
 							<FormItem>
 								<FormControl>
-									<Input
-										label="Username"
-										variant="underlined"
-										// defaultValue={username}
-										{...field}
-									/>
+										<Input
+											label="Username"
+											variant="underlined"
+											// defaultValue={username}
+											{...field}
+										/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
