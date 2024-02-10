@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       );
     }
     const hashPassword = await hash(password, 10);
-    const newUser = await db.user.create({
+    await db.user.create({
       data: {
         email,
         username,
