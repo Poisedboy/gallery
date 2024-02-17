@@ -17,6 +17,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
+import { Puff } from "react-loader-spinner";
+import Loader from "@/components/Loader";
 
 const FormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -37,8 +39,10 @@ const SignInPage = () => {
   });
 
   const [showPass, setShowPass] = useState(false);
+  const [isLoading, setLoader] = useState(false);
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    setLoader(true);
     const signInData = await signIn("credentials", {
       email: values.email.toLocaleLowerCase(),
       password: values.password,
@@ -47,7 +51,10 @@ const SignInPage = () => {
     if (signInData?.error) {
       toast.error(signInData?.error);
       console.log(signInData?.error);
+      setLoader(false);
     } else {
+      toast.success("Successfull logged in");
+      setLoader(false);
       router.push("/shop");
     }
   };
@@ -108,7 +115,10 @@ const SignInPage = () => {
             className="w-full mt-6 rounded-none"
             type="submit"
           >
-            Sign in
+            <div className="flex gap-2">
+              <Loader isLoading={isLoading} />
+              <p>Sign in</p>
+            </div>
           </Button>
         </form>
         <div className="mx-auto my-4 flex  w-full sm:w-[450px] items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">

@@ -15,6 +15,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
+import toast from "react-hot-toast";
+import Loader from "@/components/Loader";
 
 const FormSchema = z
   .object({
@@ -43,8 +45,10 @@ const SignUpPage = () => {
   });
 
   const [showPass, setShowPass] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    setLoading(true);
     const response = await fetch("api/user", {
       method: "POST",
       headers: {
@@ -57,8 +61,12 @@ const SignUpPage = () => {
       }),
     });
     if (response.ok) {
+      toast.success("Account successfully created!");
+      setLoading(false);
       router.push("/sign-in");
     } else {
+      toast.error("Registration failed!");
+      setLoading(false);
       console.error("Registration failed!");
     }
   };
@@ -148,7 +156,10 @@ const SignUpPage = () => {
             className="w-full mt-6 rounded-none"
             type="submit"
           >
-            Sign up
+            <div className="flex gap-2">
+              <Loader isLoading={isLoading} />
+              <p>Sign up</p>
+            </div>
           </Button>
         </form>
         <div className="mx-auto my-4 flex w-full sm:w-[450px] items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">

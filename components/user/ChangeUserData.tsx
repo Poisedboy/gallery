@@ -8,20 +8,17 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@nextui-org/react";
-import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
+import Loader from "../Loader";
+import ChangePassword from "../ChangePassword";
 
 const FormUserSchema = z.object({
   username: z.string().min(1, "Username is required"),
   email: z.string().min(1, "Email is required").email("Invalid email"),
-  password: z
-    .string()
-    .min(1, "Password is required")
-    .min(8, "Password must have than 8 chracters"),
 });
 
 export const ChangeUserData = () => {
@@ -32,7 +29,6 @@ export const ChangeUserData = () => {
     defaultValues: {
       username: "",
       email: "",
-      password: "",
     },
   });
 
@@ -47,8 +43,10 @@ export const ChangeUserData = () => {
   }, []);
 
   const [showPass, setShowPass] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const onSubmit = async (values: z.infer<typeof FormUserSchema>) => {
+    setLoading(true);
     try {
       const response = await fetch("api/update-user", {
         method: "PUT",
@@ -56,6 +54,7 @@ export const ChangeUserData = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          id: session?.user.id,
           username: values.username.toLocaleLowerCase(),
           email: values.email,
         }),
@@ -71,6 +70,8 @@ export const ChangeUserData = () => {
     } catch (e) {
       toast.error("Error");
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -114,58 +115,21 @@ export const ChangeUserData = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input label="Email" variant="underlined" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="relative">
-                      <Input
-                        label="Password"
-                        variant="underlined"
-                        type={showPass ? "text" : "password"}
-                        {...field}
-                      />
-                      {showPass ? (
-                        <EyeOpenIcon
-                          className="absolute right-1 top-6"
-                          onClick={() => setShowPass(!showPass)}
-                        />
-                      ) : (
-                        <EyeClosedIcon
-                          className="absolute right-1 top-6"
-                          onClick={() => setShowPass(!showPass)}
-                        />
-                      )}
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
             <Button
               variant="outline"
               className="w-full rounded-none"
               type="submit"
             >
-              Change data
+              <div className="flex gap-2">
+                <Loader isLoading={isLoading} />
+                <p>Change data</p>
+              </div>
             </Button>
           </div>
         </form>
       </Form>
+      <ChangePassword id={session?.user.id} />
     </>
   );
 };
