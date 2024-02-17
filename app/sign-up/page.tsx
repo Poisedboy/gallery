@@ -157,7 +157,7 @@ const SignUpPage = () => {
             type="submit"
           >
             <div className="flex gap-2">
-              <Loader isLoading={isLoading} />
+              <Loader isLoading={isLoading} width={24} height={24} />
               <p>Sign up</p>
             </div>
           </Button>

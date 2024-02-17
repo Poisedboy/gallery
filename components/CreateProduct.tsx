@@ -100,7 +100,7 @@ const CreateProduct = () => {
         <div className="border-[2px] border-black dark:border-white border-dashed rounded-2xl">
           <label className=" bg-slate-500 cursor-pointer">
             <img
-              className="w-[300px] h-[300px] object-no-repeat rounded-2xl"
+              className="w-[300px] h-[300px] object-contain rounded-2xl"
               alt="preview image"
               src={previewImage}
             />
