@@ -8,27 +8,30 @@ const productSchema = z.object({
   description: z.string().min(1, "Description is required").max(250),
   hardcover: z.string().min(1, "Hardcover is required"),
   image: z.string().min(1),
+  id: z.string(),
 });
 
-export async function POST(req: Request) {
+export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { title, price, description, hardcover, image } =
+    const { title, price, description, hardcover, image, id } =
       productSchema.parse(body);
 
-    await db.product.create({
-      data: {
-        name: title,
-        price,
-        description,
-        hardcover,
-        image,
-      },
-    });
+    console.log("ID >>>>", title, price, description, hardcover, image, id);
+    // await db.product.update({
+    //   where: { id },
+    //   data: {
+    //     name: title,
+    //     price,
+    //     description,
+    //     hardcover,
+    //     image,
+    //   },
+    // });
 
     return NextResponse.json(
-      { message: "Product created successfully" },
-      { status: 201 }
+      { message: "Product updated successfully" },
+      { status: 200 }
     );
   } catch (e) {
     return NextResponse.json(

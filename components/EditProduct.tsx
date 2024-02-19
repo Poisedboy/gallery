@@ -19,6 +19,7 @@ import Link from "next/link";
 interface IDelete {
   id: string;
   name: string | undefined;
+  img: string | undefined;
 }
 
 const EditProduct = () => {
@@ -30,6 +31,7 @@ const EditProduct = () => {
   const [deletingProduct, setDeletingProduct] = useState<IDelete>({
     id: "",
     name: "",
+    img: "",
   });
 
   useEffect(() => {
@@ -49,9 +51,9 @@ const EditProduct = () => {
     fetchProducts();
   }, []);
 
-  const submitDelete = ({ id, name }: IDelete) => {
+  const submitDelete = ({ id, name, img }: IDelete) => {
     setOpen(true);
-    setDeletingProduct({ id, name });
+    setDeletingProduct({ id, name, img });
   };
   const onClose = () => setOpen(false);
 
@@ -59,7 +61,7 @@ const EditProduct = () => {
     setDeletingLoader(true);
     try {
       const response = await fetch(
-        `api/delete-product?id=${deletingProduct.id}`,
+        `api/delete-product?id=${deletingProduct.id}&img=${deletingProduct.img}`,
         {
           method: "DELETE",
           headers: {
@@ -88,37 +90,50 @@ const EditProduct = () => {
       <Loader isLoading={isLoading} width={50} height={50} />
     </div>
   ) : error ? (
-    <p className="w-full text-center">No Data</p>
+    <p className="w-full text-center">There is trouble</p>
   ) : (
     <>
-      {products.map((product: IProduct) => (
-        <Card className="flex flex-wrap mb-5 p-2 sm:p-3 justify-between items-center">
-          <div className="flex flex-wrap gap-5 items-center">
-            <Image
-              alt="deleting product"
-              className="object-cover rounded-md w-[25px] sm:w-[50px] h-[25px] sm:h-[50px]"
-              src={product.image ? product.image : "/vertical-pic.jpg"}
-            />
-            <p className="truncate max-w-[6rem] w-[75px]">{product.name}</p>
-            <p>{product.price}</p>
-          </div>
-          <div className="flex flex-wrap justify-center items-center gap-5">
-            <Button variant="outline">
-              <Link href={`/settings/${product.id}`}>
-                <Settings />
-              </Link>
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() =>
-                submitDelete({ id: product.id, name: product.name })
-              }
-            >
-              <TrashIcon />
-            </Button>
-          </div>
-        </Card>
-      ))}
+      {products.length === 0 ? (
+        <div className="flex justify-center">
+          <p>No Data</p>
+        </div>
+      ) : (
+        products.map((product: IProduct) => (
+          <Card
+            key={product.id}
+            className="flex flex-wrap mb-5 p-2 sm:p-3 justify-between items-center"
+          >
+            <div className="flex flex-wrap gap-5 items-center">
+              <Image
+                alt="deleting product"
+                className="object-cover rounded-md w-[25px] sm:w-[50px] h-[25px] sm:h-[50px]"
+                src={product.image ? product.image : "/vertical-pic.jpg"}
+              />
+              <p className="truncate max-w-[6rem] w-[75px]">{product.name}</p>
+              <p>{product.price}</p>
+            </div>
+            <div className="flex flex-wrap justify-center items-center gap-5">
+              <Button variant="outline">
+                <Link href={`/settings/${product.id}`}>
+                  <Settings />
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() =>
+                  submitDelete({
+                    id: product.id,
+                    name: product.name,
+                    img: product.image,
+                  })
+                }
+              >
+                <TrashIcon />
+              </Button>
+            </div>
+          </Card>
+        ))
+      )}
       <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
         <ModalContent>
           {(onClose) => (
@@ -131,7 +146,10 @@ const EditProduct = () => {
                   Close
                 </Button>
                 <Button variant="destructive" onClick={handleDelete}>
-                  Delete
+                  <div className="flex gap-1">
+                    <Loader isLoading={deletingLoader} width={24} height={24} />
+                    <p>Delete</p>
+                  </div>
                 </Button>
               </ModalFooter>
             </>
