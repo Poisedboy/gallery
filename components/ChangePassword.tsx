@@ -48,8 +48,7 @@ const ChangePassword = ({ id }: { id: string }) => {
         toast.error(`${error.message}!`);
       }
     } catch (e) {
-      toast.error("Error");
-      console.log(e);
+      toast.error("Error during changing password!");
     } finally {
       setLoading(false);
       form.setValue("password", "");

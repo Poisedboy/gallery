@@ -68,8 +68,7 @@ export const ChangeUserData = () => {
         toast.error(`${error.message}!`);
       }
     } catch (e) {
-      toast.error("Error");
-      console.log(e);
+      toast.error("Error during changing data!");
     } finally {
       setLoading(false);
     }

@@ -17,7 +17,6 @@ export async function PUT(req: Request) {
     const { title, price, description, hardcover, image, id } =
       productSchema.parse(body);
 
-    console.log("ID >>>>", title, price, description, hardcover, image, id);
     await db.product.update({
       where: { id },
       data: {

@@ -50,7 +50,6 @@ const SignInPage = () => {
     });
     if (signInData?.error) {
       toast.error(signInData?.error);
-      console.log(signInData?.error);
       setLoader(false);
     } else {
       toast.success("Successfull logged in");
