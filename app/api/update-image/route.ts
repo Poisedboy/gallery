@@ -2,18 +2,25 @@ import { supabase } from "@/lib/supabase";
 import { db } from "@/prisma/prisma";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function PUT(req: Request) {
   try {
     const data1 = await req.formData();
 
-    const file: File | null = data1.get("file") as unknown as File;
-
+    const file = data1.get("file") as unknown as File;
+    const deleteImageName = data1.get("deleteImageName") as string;
     if (!file) {
       return NextResponse.json(
         { massage: "There is no image. Please upload!" },
         { status: 404 }
       );
     }
+
+    if (deleteImageName) {
+      await supabase.storage
+        .from("product")
+        .remove([`public/${deleteImageName}`]);
+    }
+
     const stringWithUnderscores = file?.name.replace(/ /g, "-");
 
     const uniqueId = Math.random().toString(36).substring(2, 8);
@@ -35,7 +42,7 @@ export async function POST(req: Request) {
     } = supabase.storage.from("product").getPublicUrl(uniqueFileName);
 
     return NextResponse.json(
-      { message: "Image uploaded successfully", publicUrl },
+      { message: "Image updated!", publicUrl },
       { status: 201 }
     );
   } catch (e) {

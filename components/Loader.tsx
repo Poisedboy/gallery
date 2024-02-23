@@ -1,18 +1,19 @@
-import { Puff } from "react-loader-spinner";
+import { ThreeCircles } from "react-loader-spinner";
 
 interface IProps {
   width: number;
   height: number;
   isLoading: boolean;
+  color?: string;
 }
 
-const Loader = ({ isLoading, width, height }: IProps) => {
+const Loader = ({ isLoading, width, height, color = "#7C4DFF" }: IProps) => {
   return (
-    <Puff
+    <ThreeCircles
       visible={isLoading}
       height={height}
       width={width}
-      color="#7C4DFF"
+      color={color}
       ariaLabel="puff-loading"
       wrapperStyle={{}}
       wrapperClass=""

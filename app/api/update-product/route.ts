@@ -18,16 +18,16 @@ export async function PUT(req: Request) {
       productSchema.parse(body);
 
     console.log("ID >>>>", title, price, description, hardcover, image, id);
-    // await db.product.update({
-    //   where: { id },
-    //   data: {
-    //     name: title,
-    //     price,
-    //     description,
-    //     hardcover,
-    //     image,
-    //   },
-    // });
+    await db.product.update({
+      where: { id },
+      data: {
+        name: title,
+        price,
+        description,
+        hardcover,
+        image,
+      },
+    });
 
     return NextResponse.json(
       { message: "Product updated successfully" },

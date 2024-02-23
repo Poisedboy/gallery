@@ -16,7 +16,8 @@ import { toast } from "react-hot-toast";
 import Loader from "./Loader";
 import { getFileNameFromUrl } from "@/utils/getName";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { IProduct } from "@/types/Common.type";
+
+const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000/";
 
 const FormProductSchema = z.object({
   title: z.string().min(1, "Title is required").max(100),
@@ -25,7 +26,13 @@ const FormProductSchema = z.object({
   hardcover: z.string().min(1, "Hardcover is required"),
 });
 
-const CreateProduct = ({ type, product }: { type?: string; product?: any }) => {
+interface IProps {
+  type?: string;
+  product?: any;
+  isDownloading: boolean;
+}
+
+const CreateProduct = ({ type, product, isDownloading }: IProps) => {
   const [isLoading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof FormProductSchema>>({
     resolver: zodResolver(FormProductSchema),
@@ -49,6 +56,7 @@ const CreateProduct = ({ type, product }: { type?: string; product?: any }) => {
       form.setValue("description", "");
       form.setValue("hardcover", "");
       setPreviewImage("");
+      setLoading(false);
     };
   }, [product]);
 
@@ -81,82 +89,98 @@ const CreateProduct = ({ type, product }: { type?: string; product?: any }) => {
   };
 
   const onSubmit = async (values: z.infer<typeof FormProductSchema>) => {
-    setLoading(true);
-    if (!type) {
-      if (image) {
-        const formData = new FormData();
-        formData.append("file", image as File);
-        setImageLoading(true);
-        const imageUrl = await fetch("api/upload-image", {
-          method: "POST",
-          body: formData,
-        });
-        const { message, publicUrl } = await imageUrl.json();
-
-        toast.success(message);
-
-        setImageLoading(false);
-        if (publicUrl) {
-          const response = await fetch("api/upload-product", {
+    try {
+      setLoading(true);
+      if (!type) {
+        if (image) {
+          const formData = new FormData();
+          formData.append("file", image as File);
+          setImageLoading(true);
+          const imageUrl = await fetch("api/upload-image", {
             method: "POST",
+            body: formData,
+          });
+          const { message, publicUrl } = await imageUrl.json();
+
+          toast.success(message);
+
+          setImageLoading(false);
+          if (publicUrl) {
+            const response = await fetch("api/upload-product", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                ...values,
+                image: publicUrl,
+              }),
+            });
+            if (response.ok) {
+              form.reset({
+                title: "",
+                price: "",
+                description: "",
+                hardcover: "",
+              });
+              setImage(null);
+              setPreviewImage("");
+              toast.success("Product created successfully!");
+            } else {
+              setLoading(false);
+              return toast.error("Registration failed!");
+            }
+          }
+        } else {
+          setImage(null);
+          setPreviewImage("");
+          toast.error("Select image, please!");
+        }
+      } else if (type === "edit") {
+        if (image) {
+          const imageName = getFileNameFromUrl(product.image);
+          const formData = new FormData();
+          formData.append("file", image as File);
+          formData.append("deleteImageName", imageName as string);
+
+          setImageLoading(true);
+          const updatedImage = await fetch(`${apiUrl}api/update-image`, {
+            method: "PUT",
+            body: formData,
+          });
+
+          const { message, publicUrl } = await updatedImage.json();
+          toast.success(message);
+          setImageLoading(false);
+
+          const response = await fetch(`${apiUrl}api/update-product`, {
+            method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              ...values,
+              id: product.id,
+              title: values.title,
+              price: values.price,
+              description: values.description,
+              hardcover: values.hardcover,
               image: publicUrl,
             }),
           });
           if (response.ok) {
-            form.reset({
-              title: "",
-              price: "",
-              description: "",
-              hardcover: "",
-            });
-            setImage(null);
-            setPreviewImage("");
-            toast.success("Product created successfully!");
+            setLoading(false);
+            return toast.success("Product updated!");
           } else {
             setLoading(false);
-            return toast.error("Registration failed!");
+            return toast.error("Failed during updating product!");
           }
+        } else {
+          toast.error("Select image, please!");
         }
-      } else {
-        setImage(null);
-        setPreviewImage("");
-        toast.error("Select image, please!");
       }
-    } else if (type === "edit") {
-      const imageName = getFileNameFromUrl(product.image);
-      const { data, error } = await supabase.storage
-        .from("product")
-        .update("public/" + imageName, image as File, {
-          cacheControl: "3600",
-          upsert: true,
-        });
-      if (error) {
-        setLoading(false);
-        return toast.error(error.message);
-      }
-      const {
-        data: { publicUrl },
-      } = await supabase.storage
-        .from("product")
-        .getPublicUrl("public/" + image?.name);
-      const response = await fetch("api/update-product", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: values.title,
-          price: values.price,
-          description: values.description,
-          hardcover: values.hardcover,
-          image: publicUrl,
-        }),
-      });
+    } catch (e) {
+      toast.error("Error during updating product!");
+      setImageLoading(false);
     }
     setLoading(false);
   };
@@ -258,7 +282,7 @@ const CreateProduct = ({ type, product }: { type?: string; product?: any }) => {
               variant="outline"
               className="w-full rounded-none"
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || isDownloading}
             >
               <div className="flex gap-1">
                 <Loader isLoading={isLoading} width={24} height={24} />

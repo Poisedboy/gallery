@@ -6,7 +6,7 @@ import EditProduct from "./EditProduct";
 
 const AdminSettings = () => {
   return (
-    <div className="w-full">
+    <div className="w-full xl:w-[1100px]">
       <Accordion>
         <AccordionItem key="1" aria-label="Accordion 1" title="Profile">
           <ChangeUserData />
