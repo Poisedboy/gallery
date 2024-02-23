@@ -25,7 +25,6 @@ export async function POST(req: Request) {
         image,
       },
     });
-
     return NextResponse.json(
       { message: "Product created successfully" },
       { status: 201 }

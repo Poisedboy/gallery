@@ -6,32 +6,29 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
 export const fontSans = FontSans({
-	subsets: ["latin"],
-	variable: "--font-sans",
+  subsets: ["latin"],
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
-	title: "Gallery App",
-	description: "Website of Lviv art exhibition",
+  title: "Gallery App",
+  description: "Website of Lviv art exhibition",
 };
 
 export default async function RootLayout({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	return (
-		<html lang="en">
-			<body>
-				<Providers
-					attribute="class"
-					defaultTheme="system"
-					enableSystem>
-					<Header />
-					{children}
-					<Toaster />
-				</Providers>
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en">
+      <body>
+        <Providers attribute="class" defaultTheme="system" enableSystem>
+          <Header />
+          {children}
+          <Toaster />
+        </Providers>
+      </body>
+    </html>
+  );
 }
