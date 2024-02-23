@@ -29,7 +29,7 @@ const FormProductSchema = z.object({
 interface IProps {
   type?: string;
   product?: any;
-  isDownloading: boolean;
+  isDownloading?: boolean;
 }
 
 const CreateProduct = ({ type, product, isDownloading }: IProps) => {
