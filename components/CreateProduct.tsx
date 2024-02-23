@@ -68,7 +68,7 @@ const CreateProduct = ({ type, product }: { type?: string; product?: any }) => {
 
   const inputRef = useRef<any>();
 
-  const hnadleBrowse = () => {
+  const handleBrowse = () => {
     inputRef?.current?.click();
   };
 
@@ -171,13 +171,17 @@ const CreateProduct = ({ type, product }: { type?: string; product?: any }) => {
         ) : (
           <>
             {!previewImage ? (
-              <div className="w-[300px] h-[300px]" onClick={hnadleBrowse}>
+              <div
+                className="flex flex-col justify-center items-center w-[300px] h-[300px]"
+                onClick={handleBrowse}
+              >
                 <input
                   ref={inputRef}
                   onChange={onImageChange}
                   className="hidden w-[300px] h-[300px]"
                   type="file"
                 />
+                <p className="text-[20px]">Upload Image Here</p>
               </div>
             ) : (
               <div className="relative">
