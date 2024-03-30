@@ -6,6 +6,9 @@ const nextConfig = {
   //     bufferutil: "commonjs bufferutil",
   //   });
   // },
+  images: {
+    domains: ["rrfnbimioxwxorufoapz.supabase.co"],
+  },
 };
 
 module.exports = nextConfig;

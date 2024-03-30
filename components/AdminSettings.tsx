@@ -3,6 +3,7 @@ import { Accordion, AccordionItem } from "@nextui-org/react";
 import CreateProduct from "./CreateProduct";
 import { ChangeUserData } from "./user/ChangeUserData";
 import EditProduct from "./EditProduct";
+import PublicInfo from "./PublicInfo";
 
 const AdminSettings = () => {
   return (
@@ -17,8 +18,12 @@ const AdminSettings = () => {
         <AccordionItem key="3" aria-label="Accordion 3" title="Edit Product">
           <EditProduct />
         </AccordionItem>
-        <AccordionItem key="4" aria-label="Accordion 4" title="Features">
-          Features
+        <AccordionItem
+          key="4"
+          aria-label="Accordion 4"
+          title="Public Information"
+        >
+          <PublicInfo />
         </AccordionItem>
       </Accordion>
     </div>

@@ -30,3 +30,16 @@ model Product {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model PublicInfo {
+  id String @id @default(uuid())
+  address String
+  email String
+  instagramLink String
+  facebookLink String
+  numberPhone String
+  logo String
+  banner String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

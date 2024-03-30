@@ -1,5 +1,4 @@
 import { supabase } from "@/lib/supabase";
-import { db } from "@/prisma/prisma";
 import { NextResponse } from "next/server";
 
 export async function PUT(req: Request) {
@@ -18,17 +17,17 @@ export async function PUT(req: Request) {
     if (deleteImageName) {
       await supabase.storage
         .from("product")
-        .remove([`public/${deleteImageName}`]);
+        .remove([`item/${deleteImageName}`]);
     }
 
     const stringWithUnderscores = file?.name.replace(/ /g, "-");
 
     const uniqueId = Math.random().toString(36).substring(2, 8);
 
-    const uniqueFileName = `public/${uniqueId}-${stringWithUnderscores}`;
+    const uniqueFileName = `${uniqueId}-${stringWithUnderscores}`;
     const { data, error } = await supabase.storage
       .from("product")
-      .upload(uniqueFileName, file as File);
+      .upload(`item/${uniqueFileName}`, file as File);
 
     if (error) {
       return NextResponse.json(
@@ -39,7 +38,7 @@ export async function PUT(req: Request) {
 
     const {
       data: { publicUrl },
-    } = supabase.storage.from("product").getPublicUrl(uniqueFileName);
+    } = supabase.storage.from("product").getPublicUrl(data.path);
 
     return NextResponse.json(
       { message: "Image updated!", publicUrl },
