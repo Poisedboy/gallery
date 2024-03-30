@@ -1,10 +1,9 @@
 import { db } from "@/prisma/prisma";
-import { NextApiRequest } from "next";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(req: NextApiRequest) {
+export async function GET(req: any) {
   const url = new URL(req.url as string);
   const type = url.searchParams.get("type");
 
